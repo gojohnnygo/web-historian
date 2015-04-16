@@ -1,0 +1,15 @@
+WEB TODO
+
+install nodemon
+
+run app from nodemon
+
+AJAX post request
+  on success,
+    if exists
+      load page
+    else
+      go to loading.html
+
+2. ?? how to load index.html ??
+
