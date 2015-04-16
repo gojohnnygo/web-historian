@@ -44,9 +44,12 @@ describe("Node Server Request Listener Function", function() {
     // Create or clear the file.
     var fd = fs.openSync(fixturePath, "w");
     fs.closeSync(fd);
+      //fd is a file
 
     // Write data to the file.
     fs.writeFileSync(fixturePath, "google");
+    // console.log(fs.readFileSync(archive.paths.list, 'utf8'))
+      //write "google" to the new file
 
     // Request it back.
     var req = new stubs.Request("/" + fixtureName, "GET");
@@ -57,7 +60,7 @@ describe("Node Server Request Listener Function", function() {
       function(){
         expect(res._responseCode).to.equal(200);
         expect(res._data.toString().match(/google/)).to.be.ok; // the resulting html should have the text "google"
-
+          //send back fd
         // Delete the file from the archives.
         fs.unlinkSync(fixturePath);
         done();
