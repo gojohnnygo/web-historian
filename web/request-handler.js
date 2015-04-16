@@ -28,7 +28,6 @@ exports.handleRequest = function(request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
 
   var parts = urlParser.parse(request.url);
-  // console.log('parts: ', parts);
 
   if (request.method === "GET") {
 
@@ -38,12 +37,23 @@ exports.handleRequest = function(request, response) {
         response.write(data);
         response.end();
       });
+    } else if (request.url.length > 1) {
+      fs.readFile(archive.paths.archivedSites + request.url, function (err, data){
+        response.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+        response.write(data);
+        response.end();
+      });
     }
-    else {
-        utils.sendResponse(response, "Not Found", 404);
-    }
+  } else if (request.method === "POST") {
+    fs.writeFileSync(archive.paths.list, request._postData.url + "\n");
 
-
-
+    fs.readFile(archive.paths.siteAssets + "/loading.html", function (err, data){
+      response.writeHead(302, {'Content-Type': 'text/html','Content-Length':data.length});
+      response.write(data);
+      response.end();
+    });
+  } else {
+    utils.sendResponse(response, "Not Found", 404);
   }
+
 };
