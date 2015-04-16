@@ -27,14 +27,17 @@ var actions = {
 exports.handleRequest = function(request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
 
-  var fixturePath = archive.paths.testdata;
+  var fixturePath = archive.paths.testdata + request.url;
+  var fixturePath = archive.paths.archivedSites + request.url;
+  // var fixturePath = archive.paths.testdata + '/sites.txt';
   //read file in fixturePath, see if request.url exists in it. if so,
   //exists is true
-  console.log('fixturePath: ', fixturePath);
-  fs.readdirSync(fixturePath, function(error, files){
-    console.log(files.indexOf("sites.txt"));
-    console.log('exists:', exists);
-  });
+
+  // fs.openSync(fixturePath, 'r', function(){
+  //   var exists = arguments[1] === undefined ? false : true;
+  //   console.log(exists)
+  // });
+
 
   // fs.existsSync(fixturePath, function(e) {
   //   exists = e;
@@ -48,16 +51,29 @@ exports.handleRequest = function(request, response) {
         response.write(data);
         response.end();
       });
-    } else if (exists) {
-      fs.readFile(archive.paths.archivedSites + request.url, function (err, data) {
-        response.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
-        response.write(data);
-        response.end();
-      });
+    // } else if (exists) {
     } else {
-      response.writeHead(404, 'file not found');
-      response.end();
+      console.log('inside');
+      // fs.readFile(archive.paths.archivedSites + request.url, function (err, data) {
+      fs.readFile(fixturePath, function (err, data) {
+        console.log('fixturePath', fixturePath)
+        if (err) {
+          console.log('err')
+          response.writeHead(404, 'file not found');
+          response.end();
+        } else {
+          console.log('insed else')
+          response.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+          response.write(data);
+          response.end();
+        }
+
+      });
     }
+    // else {
+    //   response.writeHead(404, 'file not found');
+    //   response.end();
+    // }
   }
 
   if (request.method === "POST") {
