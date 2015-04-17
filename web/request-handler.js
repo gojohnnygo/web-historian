@@ -27,21 +27,7 @@ var actions = {
 exports.handleRequest = function(request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
 
-  var fixturePath = archive.paths.testdata + request.url;
   var fixturePath = archive.paths.archivedSites + request.url;
-  // var fixturePath = archive.paths.testdata + '/sites.txt';
-  //read file in fixturePath, see if request.url exists in it. if so,
-  //exists is true
-
-  // fs.openSync(fixturePath, 'r', function(){
-  //   var exists = arguments[1] === undefined ? false : true;
-  //   console.log(exists)
-  // });
-
-
-  // fs.existsSync(fixturePath, function(e) {
-  //   exists = e;
-  // });
 
   if (request.method === "GET") {
 
